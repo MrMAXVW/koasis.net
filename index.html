@@ -82,6 +82,7 @@
             const [scrolled, setScrolled] = useState(false);
             const [orbStyle, setOrbStyle] = useState({ transform: 'translate(50vw, 50vh) scale(1)', opacity: 0.6 });
             const [currentCase, setCurrentCase] = useState(0);
+            const [copied, setCopied] = useState(false);
             const logoUrl = "https://raw.githubusercontent.com/MrMAXVW/koasis/main/logo.svg";
             
             const mousePos = useRef({ x: 0, y: 0 });
@@ -184,11 +185,10 @@
                     contact: { 
                         title: 'Contact Us', 
                         subtitle: 'Reach out to our experts today for a tailored consultation.',
-                        name: 'Full Name', 
-                        email: 'Email Address', 
-                        message: 'Your Message', 
-                        send: 'Send Inquiry', 
-                        emailVal: 'info@koasis.net' 
+                        emailVal: 'info@koasis.net',
+                        clickToEmail: 'Click to Email',
+                        copyText: 'Copy',
+                        copiedText: 'Copied!'
                     }
                 },
                 zh: {
@@ -228,15 +228,27 @@
                     contact: { 
                         title: '聯絡我們', 
                         subtitle: '即刻聯繫我們的專家，獲取您的專屬顧問方案。',
-                        name: '姓名', 
-                        email: '電郵', 
-                        message: '訊息', 
-                        send: '提交查詢', 
-                        emailVal: 'info@koasis.net' 
+                        emailVal: 'info@koasis.net',
+                        clickToEmail: '點擊發送電郵',
+                        copyText: '複製',
+                        copiedText: '已複製！'
                     }
                 }
             };
             const t = content[lang];
+
+            const copyToClipboard = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const el = document.createElement('textarea');
+                el.value = t.contact.emailVal;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            };
 
             return (
                 <div className="relative overflow-x-hidden w-full">
@@ -331,34 +343,39 @@
                         </div>
                     </section>
 
+                    {/* Contact Section - Form Removed, Content Centered with Copy Button */}
                     <section id="contact" className="relative py-32 bg-emerald-950 text-white z-10">
                         <div className="container mx-auto px-6">
-                            <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-20">
-                                <div className="reveal-on-scroll space-y-10">
-                                    <h2 className="text-6xl font-black leading-tight tracking-tighter">{t.contact.title}</h2>
-                                    <p className="text-emerald-300 text-xl">{t.contact.subtitle}</p>
-                                    
-                                    {/* Email Interactive Section */}
+                            <div className="max-w-2xl mx-auto text-center space-y-10 reveal-on-scroll">
+                                <h2 className="text-6xl font-black leading-tight tracking-tighter">{t.contact.title}</h2>
+                                <p className="text-emerald-300 text-xl">{t.contact.subtitle}</p>
+                                
+                                {/* Email Box with Inline Copy Trigger */}
+                                <div className="email-hover-effect flex flex-col sm:flex-row items-center justify-between gap-6 p-8 rounded-3xl bg-emerald-900 border border-emerald-800 w-full transition-all duration-300 group text-left">
                                     <a 
                                         href={`mailto:${t.contact.emailVal}`}
-                                        className="email-hover-effect flex items-center gap-6 p-8 rounded-3xl bg-emerald-900 border border-emerald-800 w-full transition-all duration-300 group"
+                                        className="flex items-center gap-6 grow"
                                     >
                                         <div className="w-12 h-12 bg-emerald-800 rounded-xl flex items-center justify-center text-lime-400 shrink-0 group-hover:bg-lime-400 group-hover:text-emerald-900 transition-colors">
                                             <Icon name="mail" size="24px" />
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className="text-xs uppercase tracking-widest text-emerald-500 font-black mb-1">Click to Email</span>
+                                            <span className="text-xs uppercase tracking-widest text-emerald-500 font-black mb-1">
+                                                {t.contact.clickToEmail}
+                                            </span>
                                             <span className="text-xl md:text-2xl font-bold truncate text-white">{t.contact.emailVal}</span>
                                         </div>
                                     </a>
-                                </div>
-                                <div className="reveal-on-scroll bg-white rounded-[3rem] p-10 md:p-12 shadow-2xl text-slate-800">
-                                    <form className="space-y-6" onSubmit={e => e.preventDefault()}>
-                                        <div><label className="text-emerald-950 font-black text-xs uppercase tracking-widest mb-2 block">{t.contact.name}</label><input className="w-full px-6 py-4 rounded-xl bg-slate-100 outline-none font-bold" placeholder={t.contact.name} /></div>
-                                        <div><label className="text-emerald-950 font-black text-xs uppercase tracking-widest mb-2 block">{t.contact.email}</label><input className="w-full px-6 py-4 rounded-xl bg-slate-100 outline-none font-bold" placeholder={t.contact.email} /></div>
-                                        <div><label className="text-emerald-950 font-black text-xs uppercase tracking-widest mb-2 block">{t.contact.message}</label><textarea rows="3" className="w-full px-6 py-4 rounded-xl bg-slate-100 outline-none font-bold resize-none" placeholder={t.contact.message}></textarea></div>
-                                        <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-5 rounded-2xl text-lg transition-all shadow-xl active:scale-95">{t.contact.send}</button>
-                                    </form>
+                                    
+                                    {/* Copy Button */}
+                                    <button
+                                        onClick={copyToClipboard}
+                                        className={`px-5 py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 shrink-0 ${copied ? 'bg-lime-400 text-emerald-950' : 'bg-emerald-800 hover:bg-lime-400 hover:text-emerald-950 text-lime-400'}`}
+                                        title={copied ? t.contact.copiedText : t.contact.copyText}
+                                    >
+                                        <Icon name={copied ? "check" : "content_copy"} size="18px" />
+                                        <span>{copied ? t.contact.copiedText : t.contact.copyText}</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
