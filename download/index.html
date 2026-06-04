@@ -471,11 +471,11 @@
                                                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${isPdf ? 'bg-rose-50 text-rose-600' : 'bg-blue-50 text-blue-600'}`}>
                                                     <Icon name={isPdf ? "picture_as_pdf" : "folder_zip"} size="26px" />
                                                 </div>
-                                                <div className="truncate pr-2">
-                                                    <h3 className="font-bold text-lg text-emerald-950 truncate" title={doc.title[lang] || doc.title.en}>
+                                                <div className="min-w-0 grow">
+                                                    <h3 className="font-bold text-lg text-emerald-950 break-words leading-tight" title={doc.title[lang] || doc.title.en}>
                                                         {doc.title[lang] || doc.title.en}
                                                     </h3>
-                                                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-slate-400 font-bold tracking-wide uppercase">
+                                                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-xs text-slate-400 font-bold tracking-wide uppercase">
                                                         <span className="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded text-[10px] tracking-normal font-black">
                                                             {t.categories[doc.category]}
                                                         </span>
