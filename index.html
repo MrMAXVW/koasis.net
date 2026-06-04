@@ -149,7 +149,7 @@
 
             const content = {
                 en: {
-                    hero: { title: 'Empowering Your Digital Evolution', subtitle: 'KOASIS provides cutting-edge hardware and AI-driven solutions to transform your business documents into strategic assets.', cta: 'Explore Solutions', contactCta: 'Contact Us' },
+                    hero: { title: 'Empowering Your Digital Evolution', subtitle: 'KOASIS provides cutting-edge hardware and AI-driven solutions to transform your business documents into strategic assets.', cta: 'Explore Solutions', downloadCta: 'Downloads', contactCta: 'Contact Us' },
                     equipment: {
                         title: 'Advanced Equipment',
                         items: [
@@ -192,7 +192,7 @@
                     }
                 },
                 zh: {
-                    hero: { title: '推動數碼轉型，成就無限可能', subtitle: '客為先 提供頂尖硬體與 AI 驅動方案，將您的業務文件轉化為戰略資產。', cta: '立即探索', contactCta: '聯絡我們' },
+                    hero: { title: '推動數碼轉型，成就無限可能', subtitle: '客為先 提供頂尖硬體與 AI 驅動方案，將您的業務文件轉化為戰略資產。', cta: '立即探索', downloadCta: '下載專區', contactCta: '聯絡我們' },
                     equipment: {
                         title: '先進硬體設備',
                         items: [
@@ -235,7 +235,7 @@
                     }
                 },
                 sc: {
-                    hero: { title: '推动数码转型，成就无限可能', subtitle: '客为先 提供顶尖硬件与 AI 驱动方案，将您的业务文件转化为战略资产。', cta: '立即探索', contactCta: '联络我们' },
+                    hero: { title: '推动数码转型，成就无限可能', subtitle: '客为先 提供顶尖硬件与 AI 驱动方案，将您的业务文件转化为战略资产。', cta: '立即探索', downloadCta: '下载专区', contactCta: '联络我们' },
                     equipment: {
                         title: '先进硬件设备',
                         items: [
@@ -250,7 +250,7 @@
                     solutions: {
                         title: '智慧解决方案',
                         items: [
-                            { name: 'AI 提取方案', desc: '先进的 AI 数据提取与文件自动分类技术。', icon: 'psychology' },
+                            { name: 'AI 提取方案', desc: '先进的 AI data 提取与文件自动分类技术。', icon: 'psychology' },
                             { name: '前端提取系统', desc: '高效的入口点文件数字化解决方案。', icon: 'input' },
                             { name: 'SharePoint 替代方案', desc: '现代化的企业协作与存储替代方案。', icon: 'rebase_edit' },
                             { name: '文件管理系统', desc: '全面的记录组织与检索管理系统。', icon: 'description' },
@@ -408,6 +408,15 @@
                                     >
                                         {t.hero.cta} <Icon name="arrow_forward" size="20px" />
                                     </a>
+                                    
+                                    {/* New Download Center Button linking to /download/ */}
+                                    <a 
+                                        href="./download/"
+                                        className="bg-emerald-100 text-emerald-800 px-10 py-5 rounded-2xl font-bold flex items-center gap-2 hover:bg-emerald-200 transition-all hover:-translate-y-1 shadow-sm"
+                                    >
+                                        {t.hero.downloadCta} <Icon name="download" size="20px" />
+                                    </a>
+
                                     {/* Contact us button with customized fast smooth scroll */}
                                     <a 
                                         href="#contact" 
