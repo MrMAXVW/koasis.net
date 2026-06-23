@@ -13,8 +13,10 @@
     <!-- React & ReactDOM CDN -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <!-- Babel for JSX Compilation -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Pinned stable Babel Standalone to prevent ES Module appendChild error in sandboxed/preview frames -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    
     <!-- Google Material Symbols -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
@@ -425,7 +427,6 @@
                                 )}
                             </div>
 
-                            {}
                             <div className="flex flex-wrap justify-center gap-2 pt-4">
                                 {Object.keys(t.categories).map((catKey) => {
                                     const isSelected = activeCategory === catKey;
@@ -455,7 +456,6 @@
                             </span>
                         </div>
 
-                        {}
                         {filteredDocuments.length > 0 ? (
                             <div className="space-y-4">
                                 {filteredDocuments.map((doc) => {
