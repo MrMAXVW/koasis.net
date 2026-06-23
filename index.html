@@ -13,8 +13,10 @@
     <!-- React & ReactDOM CDN -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <!-- Babel for JSX Compilation -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Pinned stable Babel Standalone to prevent ES Module appendChild error in sandboxed/preview frames -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    
     <!-- Google Material Symbols -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
@@ -254,7 +256,7 @@
                             { name: '前端提取系统', desc: '高效的入口点文件数字化解决方案。', icon: 'input' },
                             { name: 'SharePoint 替代方案', desc: '现代化的企业协作与存储替代方案。', icon: 'rebase_edit' },
                             { name: '文件管理系统', desc: '全面的记录组织与检索管理系统。', icon: 'description' },
-                            { name: '信息安全', desc: '企业级数据加密与严格的资产访问控制。', icon: 'enhanced_encryption' },
+                            { name: '信息安全', desc: '企业级数据加密与严格 the 资产访问控制。', icon: 'enhanced_encryption' },
                             { name: 'RPA 自动化', desc: '机器人流程自动化，消除重复性手动工作。', icon: 'bolt' },
                             { name: 'BI 商业智能', desc: '商业智能工具，将数据转化为可视化洞察。', icon: 'monitoring' },
                             { name: '更多方案', desc: '为您的独特需求提供定制化软件开发服务。', icon: 'add_circle' }
@@ -389,18 +391,17 @@
                                         const parts = text.split(keyword);
                                         if (parts.length > 1) {
                                             return (
-                                                <>
+                                                <React.Fragment>
                                                     {parts[0]}
                                                     <span className="font-extrabold text-emerald-900 drop-shadow-sm">{keyword}</span>
                                                     {parts[1]}
-                                                </>
+                                                </React.Fragment>
                                             );
                                         }
                                         return text;
                                     })()}
                                 </p>
                                 <div className="flex flex-wrap gap-4 pt-4">
-                                    {/* Explore solutions button with customized fast smooth scroll */}
                                     <a 
                                         href="#solutions" 
                                         onClick={(e) => handleScrollTo(e, 'solutions')}
@@ -409,7 +410,6 @@
                                         {t.hero.cta} <Icon name="arrow_forward" size="20px" />
                                     </a>
                                     
-                                    {/* New Download Center Button linking to /download/ */}
                                     <a 
                                         href="./download/"
                                         className="bg-emerald-100 text-emerald-800 px-10 py-5 rounded-2xl font-bold flex items-center gap-2 hover:bg-emerald-200 transition-all hover:-translate-y-1 shadow-sm"
@@ -417,7 +417,6 @@
                                         {t.hero.downloadCta} <Icon name="download" size="20px" />
                                     </a>
 
-                                    {/* Contact us button with customized fast smooth scroll */}
                                     <a 
                                         href="#contact" 
                                         onClick={(e) => handleScrollTo(e, 'contact')}
@@ -494,14 +493,12 @@
                         </div>
                     </section>
 
-                    {/* Contact Section - Form Removed, Content Centered with Copy Button */}
                     <section id="contact" className="relative py-32 bg-emerald-950 text-white z-10">
                         <div className="container mx-auto px-6">
                             <div className="max-w-2xl mx-auto text-center space-y-10 reveal-on-scroll">
                                 <h2 className="text-6xl font-black leading-tight tracking-tighter">{t.contact.title}</h2>
                                 <p className="text-emerald-300 text-xl">{t.contact.subtitle}</p>
                                 
-                                {/* Email Box with Inline Copy Trigger */}
                                 <div className="email-hover-effect flex flex-col sm:flex-row items-center justify-between gap-6 p-8 rounded-3xl bg-emerald-900 border border-emerald-800 w-full transition-all duration-300 group text-left">
                                     <a 
                                         href={`mailto:${t.contact.emailVal}`}
@@ -518,7 +515,6 @@
                                         </div>
                                     </a>
                                     
-                                    {/* Copy Button */}
                                     <button
                                         onClick={copyToClipboard}
                                         className={`px-5 py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 shrink-0 ${copied ? 'bg-lime-400 text-emerald-950' : 'bg-emerald-800 hover:bg-lime-400 hover:text-emerald-950 text-lime-400'}`}
