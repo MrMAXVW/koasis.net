@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOASIS Company Limited | About Us</title>
+    
+    <!-- Custom Favicon from GitHub -->
+    <link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/MrMAXVW/koasis.net/refs/heads/main/favicon.svg">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & ReactDOM CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Pinned Babel Standalone CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    
+    <!-- Google Material Symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
+        
+        .hero-gradient {
+            background: radial-gradient(circle at 50% 50%, #f0fdf4 0%, #ffffff 100%);
+        }
+
+        .interactive-orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(52, 211, 153, 0.4) 0%, rgba(16, 185, 129, 0) 70%);
+            filter: blur(40px);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            transition: transform 0.6s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 0.6s ease;
+            will-change: transform;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 30px -10px rgba(16, 185, 129, 0.12);
+        }
+    </style>
+</head>
+<body class="text-slate-800 bg-slate-50 selection:bg-lime-200">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const Icon = ({ name, size = "24px", className = "" }) => (
+            <span className={`material-symbols-outlined ${className}`} style={{ fontSize: size }}>
+                {name}
+            </span>
+        );
+
+        const App = () => {
+            const [lang, setLang] = useState('en');
+            const [scrolled, setScrolled] = useState(false);
+            const [menuOpen, setMenuOpen] = useState(false);
+            const [copied, setCopied] = useState(false);
+            const [orbStyle, setOrbStyle] = useState({ transform: 'translate(50vw, 50vh) scale(1)', opacity: 0.6 });
+            
+            const logoUrl = "https://raw.githubusercontent.com/MrMAXVW/koasis/main/logo.svg";
+
+            const mousePos = useRef({ x: 0, y: 0 });
+            const scrollPos = useRef(0);
+
+            useEffect(() => {
+                const handleScroll = () => {
+                    setScrolled(window.scrollY > 20);
+                    scrollPos.current = window.scrollY;
+                    updateOrb();
+                };
+
+                const handleMouseMove = (e) => {
+                    mousePos.current = { x: e.clientX, y: e.clientY };
+                    updateOrb();
+                };
+
+                const updateOrb = () => {
+                    const viewWidth = window.innerWidth;
+                    const viewHeight = window.innerHeight;
+                    const baseY = (viewHeight * 0.35) + (scrollPos.current * 0.15);
+                    const baseX = (viewWidth * 0.75);
+                    const dx = mousePos.current.x - baseX;
+                    const dy = mousePos.current.y - baseY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    let scale = 1;
+                    let opacity = 0.4;
+                    let offsetX = 0;
+                    let offsetY = 0;
+
+                    if (distance < 400) {
+                        scale = 1 + (1 - distance / 400) * 0.7;
+                        opacity = 0.4 + (1 - distance / 400) * 0.3;
+                        offsetX = (dx / distance) * -18;
+                        offsetY = (dy / distance) * -18;
+                    }
+
+                    setOrbStyle({
+                        transform: `translate(${baseX + offsetX - 150}px, ${baseY + offsetY - 150}px) scale(${scale})`,
+                        opacity: opacity
+                    });
+                };
+
+                window.addEventListener('scroll', handleScroll);
+                window.addEventListener('mousemove', handleMouseMove);
+                updateOrb();
+
+                return () => {
+                    window.removeEventListener('scroll', handleScroll);
+                    window.removeEventListener('mousemove', handleMouseMove);
+                };
+            }, []);
+
+            const content = {
+                en: {
+                    nav: {
+                        home: 'Home',
+                        download: 'Download',
+                        bio: 'Bio',
+                        about: 'About',
+                        projects: 'Projects'
+                    },
+                    hero: {
+                        badge: 'About KOASIS',
+                        title: 'Innovating Today for a Smarter Tomorrow',
+                        subtitle: 'KOASIS Company Limited is dedicated to transforming document management and AI-driven business solutions with a "Customers Always Come First" ethos.'
+                    },
+                    bioSection: {
+                        tag: 'Company Overview',
+                        title: 'Who We Are',
+                        p1: 'KOASIS Company Limited is a leading technology solutions provider specializing in enterprise document digitization, AI capture box integrations, high-speed document scanners, and intelligent process automation.',
+                        p2: 'By combining high-performance hardware—such as Kodak scanners, HuaGo AI boxes, and overhead units—with state-of-the-art software systems, KOASIS empowers government agencies, healthcare institutes, and enterprise corporations to unlock the full strategic value of their physical and digital assets.'
+                    },
+                    storySection: {
+                        tag: 'Our Journey',
+                        title: 'The KOASIS Story',
+                        p1: 'Founded with a clear vision to redefine how organizations interact with paper documents and data archives, KOASIS started as an enterprise hardware solutions team.',
+                        p2: 'Recognizing the shift toward artificial intelligence and cloud computing, KOASIS quickly evolved into a holistic solutions innovator. Today, we bridge physical records with artificial intelligence, empowering businesses to achieve effortless searching, compliance, and automated workflows.'
+                    },
+                    missionVision: {
+                        missionTag: 'Our Mission',
+                        missionTitle: 'Empowerment Through Intelligence',
+                        missionDesc: 'To deliver robust, scalable, and intuitive document management and AI technologies that eliminate operational friction and accelerate digital evolution for our clients.',
+                        
+                        visionTag: 'Our Vision',
+                        visionTitle: 'Region\'s Most Trusted Partner',
+                        visionDesc: 'To be the premier digital transformation catalyst in the region, recognized for technical innovation, uncompromising security, and customer-first service excellence.',
+                        
+                        goalsTag: 'Strategic Goals',
+                        goalsTitle: 'Our Commitments',
+                        goalsList: [
+                            { title: 'Customer-Centric Focus', desc: 'Putting customer needs at the core of every solution, custom development, and support interaction.', icon: 'group' },
+                            { title: 'AI & Hardware Synergy', desc: 'Seamlessly pairing leading scanner hardware with cutting-edge AI vision algorithms.', icon: 'memory' },
+                            { title: 'Uncompromised Security', desc: 'Ensuring enterprise-grade encryption, data privacy, and compliance across all systems.', icon: 'verified_user' },
+                            { title: 'Continuous Evolution', desc: 'Rapidly adapting to technological shifts to provide our clients with long-term competitive advantages.', icon: 'trending_up' }
+                        ]
+                    },
+                    statsSection: {
+                        title: 'Impact in Numbers',
+                        items: [
+                            { number: '10M+', label: 'Documents Digitized' },
+                            { number: '99.9%', label: 'AI Accuracy Rate' },
+                            { number: '100+', label: 'Enterprise Clients' },
+                            { number: '24/7', label: 'Dedicated Support' }
+                        ]
+                    },
+                    placeholdersSection: {
+                        teamTitle: 'Leadership & Expert Team',
+                        teamSubtitle: 'Meet the visionaries and technical minds driving KOASIS forward.',
+                        teamMembers: [
+                            { name: 'Leadership Member', role: 'Executive Leadership', desc: '[Placeholder for key executive profile details, experience, and vision for KOASIS.]', icon: 'account_circle' },
+                            { name: 'Solutions Architect', role: 'Technology & AI', desc: '[Placeholder for lead solution architect details, specialization in OCR and AI hardware.]', icon: 'developer_board' },
+                            { name: 'Customer Success Head', role: 'Operations & Support', desc: '[Placeholder for client relations lead focusing on "Customers Always Come First" standards.]', icon: 'support_agent' }
+                        ],
+                        milestoneTitle: 'Key Milestones',
+                        milestones: [
+                            { year: '2026+', title: 'AI Box Integration Expansion', desc: '[Placeholder for upcoming technology launches and regional expansion plans.]' },
+                            { year: '2024', title: 'Enterprise Partnership Growth', desc: '[Placeholder for major enterprise contracts and strategic scanner partner certifications.]' },
+                            { year: '2023', title: 'Company Founding', desc: '[Placeholder for official inception details and founding vision of KOASIS.]' }
+                        ]
+                    },
+                    contact: {
+                        title: 'Get in Touch with Our Team',
+                        subtitle: 'Have questions or interested in discovering how KOASIS can transform your organization?',
+                        emailVal: 'info@koasis.net',
+                        clickToEmail: 'Direct Email',
+                        copyText: 'Copy Email',
+                        copiedText: 'Copied!'
+                    }
+                },
+                zh: {
+                    nav: {
+                        home: '首頁',
+                        download: '下載專區',
+                        bio: '個人簡介',
+                        about: '關於我們',
+                        projects: '專案項目'
+                    },
+                    hero: {
+                        badge: '關於客為先',
+                        title: '開創智慧新局，成就無限可能',
+                        subtitle: '客為先有限公司 (KOASIS) 秉持「顧客永遠第一」的服務理念，致力於引領文件管理與 AI 驅動業務方案的革新。'
+                    },
+                    bioSection: {
+                        tag: '公司概覽',
+                        title: '我們是誰',
+                        p1: '客為先有限公司 (KOASIS) 是領先的科技方案提供商，專注於企業級文件數位化、AI 影像盒整合、高速文件掃描器及智慧流程自動化。',
+                        p2: '透過整合 Kodak 掃描器、華高 AI 盒子及高拍儀等高效能硬體，並結合前沿軟體系統，KOASIS 賦能政府機關、醫療機構及知名企業，全面釋放實體與數位資產的戰略價值。'
+                    },
+                    storySection: {
+                        tag: '發展歷程',
+                        title: 'KOASIS 的品牌故事',
+                        p1: '創立之初，KOASIS 懷揣著重塑企業與紙質文件及數據歸檔互動方式的清晰願景，建立了一支專注於企業硬體方案的專業團隊。',
+                        p2: '敏銳察覺到人工智慧與雲端運算的發展趨勢，KOASIS 迅速轉型為全方位解決方案創新者。今天，我們將實體檔案與人工智慧無縫連接，助力企業實現輕鬆檢索、合規管理與自動化工作流。'
+                    },
+                    missionVision: {
+                        missionTag: '我們的使命',
+                        missionTitle: '智慧賦能，極致效率',
+                        missionDesc: '提供強大、可擴展且直觀的文件管理與 AI 技術，消除操作障礙，加速客戶的數碼轉型進程。',
+                        
+                        visionTag: '我們的願景',
+                        visionTitle: '區域內最值得信賴的合作夥伴',
+                        visionDesc: '成為區域內首選的數碼轉型推手，以技術創新、嚴謹安全及「客為先」的優質服務享譽業界。',
+                        
+                        goalsTag: '戰略目標',
+                        goalsTitle: '我們的四大承諾',
+                        goalsList: [
+                            { title: '以客為先理念', desc: '將客戶需求置於每個解決方案、客製化開發與支援服務的核心位置。', icon: 'group' },
+                            { title: 'AI 與硬體協同', desc: '將頂尖掃描硬體與前沿 AI 視覺演算法無縫結合，提升精準度。', icon: 'memory' },
+                            { title: '嚴格資訊安全', desc: '確保企業級資料加密、隱私保護與全系統合規營運。', icon: 'verified_user' },
+                            { title: '持續創新演進', desc: '快速適應技術變革，為客戶締造長遠的市場競爭優勢。', icon: 'trending_up' }
+                        ]
+                    },
+                    statsSection: {
+                        title: '數據展現實力',
+                        items: [
+                            { number: '10M+', label: '已數位化文件' },
+                            { number: '99.9%', label: 'AI 識別準確率' },
+                            { number: '100+', label: '企業級客戶' },
+                            { number: '24/7', label: '專屬客戶支援' }
+                        ]
+                    },
+                    placeholdersSection: {
+                        teamTitle: '管理團隊與技術專家',
+                        teamSubtitle: '認識推動 KOASIS 不斷前行的遠見者與技術菁英。',
+                        teamMembers: [
+                            { name: '管理層成員', role: '行政領導團隊', desc: '[佔位符：核心管理層背景、行業經驗及對 KOASIS 的發展願景。]', icon: 'account_circle' },
+                            { name: '解決方案架構師', role: '技術與 AI 研發', desc: '[佔位符：首席架構師介紹，專精於 OCR 光學識別與 AI 影像硬體。]', icon: 'developer_board' },
+                            { name: '客戶成功負責人', role: '營運與客戶服務', desc: '[佔位符：客戶關係負責人，貫徹「客為先」服務標準。]', icon: 'support_agent' }
+                        ],
+                        milestoneTitle: '重要里程碑',
+                        milestones: [
+                            { year: '2026+', title: 'AI 影像盒平台擴展', desc: '[佔位符：即將推出的新技術產品與區域市場擴展計劃。]' },
+                            { year: '2024', title: '企業夥伴關係深化', desc: '[佔位符：重大企業合約簽訂及頂級掃描器品牌認證。]' },
+                            { year: '2023', title: '公司正式成立', desc: '[佔位符：KOASIS 客為先有限公司成立背景與初衷。]' }
+                        ]
+                    },
+                    contact: {
+                        title: '與我們的團隊聯絡',
+                        subtitle: '有任何疑問或希望了解 KOASIS 如何助力您的企業轉型？歡迎隨時聯繫。',
+                        emailVal: 'info@koasis.net',
+                        clickToEmail: '直接發送電郵',
+                        copyText: '複製電郵',
+                        copiedText: '已複製！'
+                    }
+                },
+                sc: {
+                    nav: {
+                        home: '首页',
+                        download: '下载专区',
+                        bio: '个人简介',
+                        about: '关于我们',
+                        projects: '专案项目'
+                    },
+                    hero: {
+                        badge: '关于客为先',
+                        title: '开创智慧新局，成就无限可能',
+                        subtitle: '客为先有限公司 (KOASIS) 秉持“顾客永远第一”的服务理念，致力于引领文件管理与 AI 驱动业务方案的革新。'
+                    },
+                    bioSection: {
+                        tag: '公司概览',
+                        title: '我们是谁',
+                        p1: '客为先有限公司 (KOASIS) 是领先的科技方案提供商，专注于企业级文件数字化、AI 图像盒整合、高速文件扫描仪及智慧流程自动化。',
+                        p2: '通过整合 Kodak 扫描仪、华高 AI 盒子及高拍仪等高效能硬件，并结合前沿软件系统，KOASIS 赋能政府机关、医疗机构及知名企业，全面释放实体与数字资产的战略价值。'
+                    },
+                    storySection: {
+                        tag: '发展历程',
+                        title: 'KOASIS 的品牌故事',
+                        p1: '创立之初，KOASIS 怀揣着重塑企业与纸质文件及数据归档互动方式的清晰愿景，建立了一支专注于企业硬件方案的专业团队。',
+                        p2: '敏锐察觉到人工智能与云计算的发展趋势，KOASIS 迅速转型为全方位解决方案创新者。今天，我们将实体档案与人工智能无缝连接，助力企业实现轻松检索、合规管理与自动化工作流。'
+                    },
+                    missionVision: {
+                        missionTag: '我们的使命',
+                        missionTitle: '智慧赋能，极致效率',
+                        missionDesc: '提供强大、可扩展且直观的文件管理与 AI 技术，消除操作障碍，加速客户的数码转型进程。',
+                        
+                        visionTag: '我们的愿景',
+                        visionTitle: '区域内最值得信赖的合作伙伴',
+                        visionDesc: '成为区域内首选的数码转型推手，以技术创新、严谨安全及“客为先”的优质服务享誉业界。',
+                        
+                        goalsTag: '战略目标',
+                        goalsTitle: '我们的四大承诺',
+                        goalsList: [
+                            { title: '以客为先理念', desc: '将客户需求置于每个解决方案、定制化开发与支援服务的核心位置。', icon: 'group' },
+                            { title: 'AI 与硬件协同', desc: '将顶尖扫描硬件与前沿 AI 视觉算法无缝结合，提升精准度。', icon: 'memory' },
+                            { title: '严格信息安全', desc: '确保企业级数据加密、隐私保护与全系统合规运营。', icon: 'verified_user' },
+                            { title: '持续创新演进', desc: '快速适应技术变革，为客户缔造长远的市场竞争优势。', icon: 'trending_up' }
+                        ]
+                    },
+                    statsSection: {
+                        title: '数据展现实力',
+                        items: [
+                            { number: '10M+', label: '已数字化文件' },
+                            { number: '99.9%', label: 'AI 识别准确率' },
+                            { number: '100+', label: '企业级客户' },
+                            { number: '24/7', label: '专属客户支援' }
+                        ]
+                    },
+                    placeholdersSection: {
+                        teamTitle: '管理团队与技术专家',
+                        teamSubtitle: '认识推动 KOASIS 不断前行的远见者与技术精英。',
+                        teamMembers: [
+                            { name: '管理层成员', role: '行政领导团队', desc: '[占位符：核心管理层背景、行业经验及对 KOASIS 的发展愿景。]', icon: 'account_circle' },
+                            { name: '解决方案架构师', role: '技术与 AI 研发', desc: '[占位符：首席架构师介绍，专精于 OCR 光学识别与 AI 图像硬件。]', icon: 'developer_board' },
+                            { name: '客户成功负责人', role: '运营与客户服务', desc: '[占位符：客户关系负责人，贯彻“客为先”服务标准。]', icon: 'support_agent' }
+                        ],
+                        milestoneTitle: '重要里程碑',
+                        milestones: [
+                            { year: '2026+', title: 'AI 图像盒平台扩展', desc: '[占位符：即将推出的新技术产品与区域市场扩展计划。]' },
+                            { year: '2024', title: '企业伙伴关系深化', desc: '[占位符：重大企业合同签订及顶级扫描仪品牌认证。]' },
+                            { year: '2023', title: '公司正式成立', desc: '[占位符：KOASIS 客为先有限公司成立背景与初衷。]' }
+                        ]
+                    },
+                    contact: {
+                        title: '与我们的团队联络',
+                        subtitle: '有任何疑问或希望了解 KOASIS 如何助力您的企业转型？欢迎随时联系。',
+                        emailVal: 'info@koasis.net',
+                        clickToEmail: '直接发送电邮',
+                        copyText: '复制电邮',
+                        copiedText: '复制成功！'
+                    }
+                }
+            };
+            const t = content[lang];
+
+            const handleLangCycle = () => {
+                if (lang === 'en') setLang('zh');
+                else if (lang === 'zh') setLang('sc');
+                else setLang('en');
+            };
+
+            const getTooltipText = () => {
+                if (lang === 'en') return 'Switch to Traditional Chinese / 切換至繁體中文';
+                if (lang === 'zh') return '切换至简体中文 / Switch to Simplified Chinese';
+                return 'Switch to English / 切換至英文';
+            };
+
+            const copyToClipboard = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const el = document.createElement('textarea');
+                el.value = t.contact.emailVal;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            };
+
+            return (
+                <div className="relative overflow-x-hidden w-full min-h-screen bg-slate-50 flex flex-col justify-between">
+                    {/* Interactive background orb */}
+                    <div className="interactive-orb" style={orbStyle}></div>
+                    
+                    {/* Navigation Bar */}
+                    {}
+                    <nav className={`fixed w-full z-[100] transition-all duration-500 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-3' : 'bg-transparent py-6'}`}>
+                        <div className="container mx-auto px-6 flex justify-between items-center relative">
+                            <a href="../" className="relative z-50">
+                                <img src={logoUrl} alt="KOASIS" className="h-8 md:h-10 w-auto hover:scale-105 transition-transform" />
+                            </a>
+                            
+                            <div className="flex items-center gap-3 relative z-50">
+                                <button 
+                                    onClick={handleLangCycle} 
+                                    className="p-3 bg-emerald-100 text-emerald-700 rounded-xl hover:bg-emerald-200 transition-all flex items-center justify-center aspect-square shadow-sm"
+                                    title={getTooltipText()}
+                                >
+                                    <Icon name="language" size="24px" />
+                                </button>
+
+                                <button 
+                                    onClick={() => setMenuOpen(!menuOpen)} 
+                                    className="p-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-all flex items-center justify-center aspect-square shadow-md shadow-emerald-200"
+                                    aria-label="Toggle Navigation Menu"
+                                >
+                                    <Icon name={menuOpen ? "close" : "menu"} size="24px" />
+                                </button>
+                            </div>
+
+                            {/* Dropdown Navigation Menu Overlay */}
+                            {menuOpen && (
+                                <div 
+                                    className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40" 
+                                    onClick={() => setMenuOpen(false)}
+                                ></div>
+                            )}
+
+                            {/* Navigation Drawer */}
+                            <div className={`fixed top-0 right-0 h-screen w-80 max-w-[85vw] bg-white shadow-2xl z-40 transform transition-transform duration-300 ease-in-out p-8 pt-28 flex flex-col justify-between ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                                <div className="space-y-6">
+                                    <a 
+                                        href="../" 
+                                        onClick={() => setMenuOpen(false)}
+                                        className="flex items-center gap-4 text-xl font-extrabold text-emerald-950 hover:text-emerald-600 transition-colors p-3 rounded-xl hover:bg-emerald-50"
+                                    >
+                                        <Icon name="home" size="24px" className="text-emerald-600" />
+                                        <span>{t.nav.home}</span>
+                                    </a>
+                                    <a 
+                                        href="../download/" 
+                                        onClick={() => setMenuOpen(false)}
+                                        className="flex items-center gap-4 text-xl font-extrabold text-emerald-950 hover:text-emerald-600 transition-colors p-3 rounded-xl hover:bg-emerald-50"
+                                    >
+                                        <Icon name="download" size="24px" className="text-emerald-600" />
+                                        <span>{t.nav.download}</span>
+                                    </a>
+                                    <a 
+                                        href="../bio/" 
+                                        onClick={() => setMenuOpen(false)}
+                                        className="flex items-center gap-4 text-xl font-extrabold text-emerald-950 hover:text-emerald-600 transition-colors p-3 rounded-xl hover:bg-emerald-50"
+                                    >
+                                        <Icon name="person" size="24px" className="text-emerald-600" />
+                                        <span>{t.nav.bio}</span>
+                                    </a>
+                                    <a 
+                                        href="./" 
+                                        onClick={() => setMenuOpen(false)}
+                                        className="flex items-center gap-4 text-xl font-extrabold text-emerald-600 bg-emerald-50 p-3 rounded-xl"
+                                    >
+                                        <Icon name="info" size="24px" className="text-emerald-600" />
+                                        <span>{t.nav.about}</span>
+                                    </a>
+                                    <a 
+                                        href="../projects/" 
+                                        onClick={() => setMenuOpen(false)}
+                                        className="flex items-center gap-4 text-xl font-extrabold text-emerald-950 hover:text-emerald-600 transition-colors p-3 rounded-xl hover:bg-emerald-50"
+                                    >
+                                        <Icon name="folder_open" size="24px" className="text-emerald-600" />
+                                        <span>{t.nav.projects}</span>
+                                    </a>
+                                </div>
+
+                                <div className="pt-6 border-t border-slate-100 text-xs font-bold text-slate-400">
+                                    KOASIS Company Limited
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+
+                    {/* Hero Header Section */}
+                    {}
+                    <header className="relative pt-36 pb-16 hero-gradient z-10 border-b border-slate-100">
+                        <div className="container mx-auto px-6 max-w-5xl text-center space-y-4">
+                            <span className="text-xs font-black tracking-widest uppercase text-emerald-800 bg-emerald-100/80 px-4 py-2 rounded-full border border-emerald-200 inline-block">
+                                {t.hero.badge}
+                            </span>
+                            <h1 className="text-4xl md:text-6xl font-black text-emerald-950 tracking-tighter">{t.hero.title}</h1>
+                            <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">{t.hero.subtitle}</p>
+                        </div>
+                    </header>
+
+                    {/* Main Content Area */}
+                    <main className="container mx-auto px-6 max-w-5xl py-16 relative z-10 space-y-20 grow">
+                        
+                        {/* Company Bio & Story Split Section */}
+                        {}
+                        <div className="grid md:grid-cols-2 gap-8">
+                            {/* Who We Are */}
+                            <div className="bg-white p-8 md:p-10 rounded-3xl border border-slate-200/80 shadow-sm space-y-4 card-hover">
+                                <span className="text-xs font-black tracking-wider uppercase text-emerald-600 bg-emerald-50 px-3 py-1 rounded-md inline-block">
+                                    {t.bioSection.tag}
+                                </span>
+                                <h2 className="text-2xl md:text-3xl font-black text-emerald-950">{t.bioSection.title}</h2>
+                                <p className="text-slate-600 leading-relaxed text-sm md:text-base">{t.bioSection.p1}</p>
+                                <p className="text-slate-600 leading-relaxed text-sm md:text-base">{t.bioSection.p2}</p>
+                            </div>
+
+                            {/* Our Story */}
+                            <div className="bg-white p-8 md:p-10 rounded-3xl border border-slate-200/80 shadow-sm space-y-4 card-hover">
+                                <span className="text-xs font-black tracking-wider uppercase text-emerald-600 bg-emerald-50 px-3 py-1 rounded-md inline-block">
+                                    {t.storySection.tag}
+                                </span>
+                                <h2 className="text-2xl md:text-3xl font-black text-emerald-950">{t.storySection.title}</h2>
+                                <p className="text-slate-600 leading-relaxed text-sm md:text-base">{t.storySection.p1}</p>
+                                <p className="text-slate-600 leading-relaxed text-sm md:text-base">{t.storySection.p2}</p>
+                            </div>
+                        </div>
+
+                        {/* Impact Stats Counter Section */}
+                        {}
+                        <div className="bg-emerald-950 rounded-3xl p-8 md:p-12 text-white shadow-xl relative overflow-hidden">
+                            <div className="absolute -right-16 -top-16 w-64 h-64 bg-emerald-800/20 rounded-full blur-3xl pointer-events-none"></div>
+                            <h3 className="text-center text-xs font-black uppercase tracking-widest text-lime-400 mb-10">{t.statsSection.title}</h3>
+                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center relative z-10">
+                                {t.statsSection.items.map((stat, i) => (
+                                    <div key={i} className="space-y-2">
+                                        <div className="text-3xl md:text-5xl font-black text-white tracking-tight">{stat.number}</div>
+                                        <div className="text-emerald-300/80 text-xs md:text-sm font-bold uppercase tracking-wider">{stat.label}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Mission, Vision & Strategic Goals */}
+                        {}
+                        <div className="space-y-12">
+                            {/* Mission & Vision Row */}
+                            <div className="grid md:grid-cols-2 gap-8">
+                                <div className="bg-emerald-900 text-white p-8 md:p-10 rounded-3xl space-y-4 relative overflow-hidden">
+                                    <div className="w-12 h-12 bg-white/10 text-lime-400 rounded-2xl flex items-center justify-center mb-2">
+                                        <Icon name="rocket_launch" size="28px" />
+                                    </div>
+                                    <span className="text-xs font-black tracking-widest uppercase text-lime-300">
+                                        {t.missionVision.missionTag}
+                                    </span>
+                                    <h3 className="text-2xl font-extrabold">{t.missionVision.missionTitle}</h3>
+                                    <p className="text-emerald-100/80 leading-relaxed text-sm md:text-base">{t.missionVision.missionDesc}</p>
+                                </div>
+
+                                <div className="bg-emerald-900 text-white p-8 md:p-10 rounded-3xl space-y-4 relative overflow-hidden">
+                                    <div className="w-12 h-12 bg-white/10 text-lime-400 rounded-2xl flex items-center justify-center mb-2">
+                                        <Icon name="visibility" size="28px" />
+                                    </div>
+                                    <span className="text-xs font-black tracking-widest uppercase text-lime-300">
+                                        {t.missionVision.visionTag}
+                                    </span>
+                                    <h3 className="text-2xl font-extrabold">{t.missionVision.visionTitle}</h3>
+                                    <p className="text-emerald-100/80 leading-relaxed text-sm md:text-base">{t.missionVision.visionDesc}</p>
+                                </div>
+                            </div>
+
+                            {/* Goals / Commitments Grid */}
+                            <div className="bg-white rounded-3xl p-8 md:p-12 border border-slate-200/80 shadow-sm space-y-8">
+                                <div>
+                                    <span className="text-xs font-black tracking-wider uppercase text-emerald-600 bg-emerald-50 px-3 py-1 rounded-md inline-block mb-2">
+                                        {t.missionVision.goalsTag}
+                                    </span>
+                                    <h3 className="text-2xl md:text-3xl font-black text-emerald-950">{t.missionVision.goalsTitle}</h3>
+                                </div>
+
+                                <div className="grid sm:grid-cols-2 gap-6">
+                                    {t.missionVision.goalsList.map((goal, idx) => (
+                                        <div key={idx} className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-2 card-hover">
+                                            <div className="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center mb-3">
+                                                <Icon name={goal.icon} size="22px" />
+                                            </div>
+                                            <h4 className="font-extrabold text-emerald-950 text-lg">{goal.title}</h4>
+                                            <p className="text-slate-500 text-sm leading-relaxed">{goal.desc}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Placeholders Section: Leadership & Milestones */}
+                        {}
+                        <div className="space-y-12">
+                            {/* Team Placeholders */}
+                            <div className="bg-white rounded-3xl p-8 md:p-12 border border-slate-200/80 shadow-sm space-y-8">
+                                <div>
+                                    <span className="text-xs font-black tracking-widest uppercase text-emerald-800 bg-emerald-100 px-3 py-1 rounded-md inline-block mb-2">
+                                        Team Placeholder
+                                    </span>
+                                    <h3 className="text-2xl md:text-3xl font-black text-emerald-950">{t.placeholdersSection.teamTitle}</h3>
+                                    <p className="text-slate-500 text-sm mt-1">{t.placeholdersSection.teamSubtitle}</p>
+                                </div>
+
+                                <div className="grid md:grid-cols-3 gap-6">
+                                    {t.placeholdersSection.teamMembers.map((member, idx) => (
+                                        <div key={idx} className="bg-slate-50 p-6 rounded-2xl border border-slate-100 border-dashed border-slate-300 space-y-3 text-center">
+                                            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                                                <Icon name={member.icon} size="36px" />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-extrabold text-emerald-950 text-base">{member.name}</h4>
+                                                <span className="text-xs text-emerald-600 font-bold uppercase">{member.role}</span>
+                                            </div>
+                                            <p className="text-xs text-slate-400 leading-relaxed italic">{member.desc}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Milestones Placeholders */}
+                            <div className="bg-white rounded-3xl p-8 md:p-12 border border-slate-200/80 shadow-sm space-y-8">
+                                <div>
+                                    <span className="text-xs font-black tracking-widest uppercase text-emerald-800 bg-emerald-100 px-3 py-1 rounded-md inline-block mb-2">
+                                        Roadmap Placeholder
+                                    </span>
+                                    <h3 className="text-2xl md:text-3xl font-black text-emerald-950">{t.placeholdersSection.milestoneTitle}</h3>
+                                </div>
+
+                                <div className="space-y-4">
+                                    {t.placeholdersSection.milestones.map((ms, idx) => (
+                                        <div key={idx} className="bg-slate-50 p-6 rounded-2xl border border-slate-100 border-dashed border-slate-300 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                                            <div className="flex items-center gap-4">
+                                                <span className="text-xs font-black text-white bg-emerald-600 px-3 py-1.5 rounded-lg shrink-0">
+                                                    {ms.year}
+                                                </span>
+                                                <div>
+                                                    <h4 className="font-bold text-emerald-950 text-base">{ms.title}</h4>
+                                                    <p className="text-xs text-slate-400 italic mt-0.5">{ms.desc}</p>
+                                                </div>
+                                            </div>
+                                            <span className="text-[10px] font-mono text-slate-400 uppercase bg-slate-200/60 px-2.5 py-1 rounded">Future Content Placeholder</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Contact CTA Section */}
+                        {}
+                        <div className="bg-emerald-950 text-white rounded-3xl p-8 md:p-12 text-center space-y-6 shadow-xl relative overflow-hidden">
+                            <div className="absolute -right-12 -bottom-12 w-64 h-64 bg-emerald-800/30 rounded-full blur-2xl pointer-events-none"></div>
+                            <h3 className="text-3xl font-black tracking-tight relative z-10">{t.contact.title}</h3>
+                            <p className="text-emerald-200/80 text-base md:text-lg max-w-xl mx-auto relative z-10">{t.contact.subtitle}</p>
+                            
+                            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto relative z-10">
+                                <a 
+                                    href={`mailto:${t.contact.emailVal}`}
+                                    className="w-full sm:w-auto px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-2xl transition-all flex items-center justify-center gap-2 shadow-lg"
+                                >
+                                    <Icon name="mail" size="20px" />
+                                    <span>{t.contact.clickToEmail}</span>
+                                </a>
+
+                                <button
+                                    onClick={copyToClipboard}
+                                    className={`w-full sm:w-auto px-6 py-4 rounded-2xl font-extrabold transition-all flex items-center justify-center gap-2 border ${copied ? 'bg-lime-400 border-lime-400 text-emerald-950' : 'bg-emerald-900/80 border-emerald-700 text-lime-300 hover:bg-emerald-800'}`}
+                                >
+                                    <Icon name={copied ? "check" : "content_copy"} size="20px" />
+                                    <span>{copied ? t.contact.copiedText : t.contact.copyText}</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </main>
+
+                    {/* Footer */}
+                    {}
+                    <footer className="bg-emerald-950 py-12 text-center border-t border-emerald-900/50 relative z-10 mt-12">
+                        <p className="text-emerald-700 font-black tracking-widest text-xs uppercase opacity-60">
+                            © 2026 KOASIS Company Limited. All Rights Reserved.
+                        </p>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
