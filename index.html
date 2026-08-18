@@ -76,7 +76,9 @@
         );
 
         const App = () => {
-            const [lang, setLang] = useState('en');
+            const [lang, setLang] = useState(() => {
+			return localStorage.getItem('app_lang') || 'en';
+			});
             const [scrolled, setScrolled] = useState(false);
             const [menuOpen, setMenuOpen] = useState(false);
             const [orbStyle, setOrbStyle] = useState({ transform: 'translate(50vw, 50vh) scale(1)', opacity: 0.5 });
@@ -254,10 +256,14 @@
             const t = content[lang];
 
             const handleLangCycle = () => {
-                if (lang === 'en') setLang('zh');
-                else if (lang === 'zh') setLang('sc');
-                else setLang('en');
-            };
+				let nextLang = 'en';
+				if (lang === 'en') nextLang = 'zh';
+				else if (lang === 'zh') nextLang = 'sc';
+				else nextLang = 'en';
+
+				setLang(nextLang);
+				localStorage.setItem('app_lang', nextLang);
+			};
 
             const handleScrollTo = (e, id) => {
                 e.preventDefault();

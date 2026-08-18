@@ -72,7 +72,9 @@
         );
 
         const App = () => {
-            const [lang, setLang] = useState('en');
+            const [lang, setLang] = useState(() => {
+			return localStorage.getItem('app_lang') || 'en';
+			});
             const [scrolled, setScrolled] = useState(false);
             const [menuOpen, setMenuOpen] = useState(false);
             const [activeCategory, setActiveCategory] = useState('all');
@@ -373,11 +375,14 @@
                 : t.projects.filter(p => p.category === activeCategory);
 
             const handleLangCycle = () => {
-                if (lang === 'en') setLang('zh');
-                else if (lang === 'zh') setLang('sc');
-                else setLang('en');
-            };
+				let nextLang = 'en';
+				if (lang === 'en') nextLang = 'zh';
+				else if (lang === 'zh') nextLang = 'sc';
+				else nextLang = 'en';
 
+				setLang(nextLang);
+				localStorage.setItem('app_lang', nextLang);
+			};
             const handleScrollToTop = (e) => {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
